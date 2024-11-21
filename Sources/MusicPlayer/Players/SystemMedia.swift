@@ -143,7 +143,9 @@ extension MusicPlayers.SystemMedia: MusicPlayerProtocol {
     
     public func updatePlayerState() {
         MRMediaRemoteGetNowPlayingInfo_?(DispatchQueue.playerUpdate) { [weak self] info in
-            self?.getNowPlayingInfoCallback(info)
+            DispatchQueue.main.async {
+                self?.getNowPlayingInfoCallback(info)
+            }
         }
     }
 }
