@@ -5,8 +5,8 @@
 //  Created by tisfeng on 2024/11/20.
 //
 
-import SwiftUI
 import MusicPlayer
+import SwiftUI
 
 struct ContentView: View {
     private let selectedPlayer = MusicPlayers.SystemMedia()
@@ -36,7 +36,7 @@ struct ContentView: View {
                     .overlay(Color.black.opacity(0.5))
             }
 
-            VStack(spacing: 15) {
+            VStack(spacing: 20) {
                 Image(systemName: isPlaying ? "play.circle" : "pause.circle")
                     .font(.system(size: 40))
                     .onReceive(selectedPlayer!.$currentTrack) {
@@ -60,11 +60,12 @@ struct ContentView: View {
                 Text((musicTrack?.artist ?? "") + " - " + (musicTrack?.album ?? ""))
 
                 Text("duration: \(String(format: "%.1f", musicTrack?.duration ?? 0))")
-                Text("time: \(time, specifier: "%.1f")")
+                Text("start time: \(time, specifier: "%.1f")")
             }
         }
         .frame(width: 400, height: 400)
         .padding()
+        .environment(\.colorScheme, .dark)
     }
 }
 
