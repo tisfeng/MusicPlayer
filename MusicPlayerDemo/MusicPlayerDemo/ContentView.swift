@@ -8,14 +8,19 @@
 import MusicPlayer
 import SwiftUI
 
+private let timerInterval = 0.1
+
 struct ContentView: View {
     private let selectedPlayer = MusicPlayers.SystemMedia()
 
     @State private var musicTrack: MusicTrack?
     @State private var artwork = Image(systemName: "music.note")
 
-    @State private var time = 0.0
+    @State private var elapsedTime: Double = 0
     @State private var isPlaying = false
+
+    private let timer = Timer.publish(every: timerInterval, on: .main, in: .common)
+        .autoconnect()
 
     var body: some View {
         ZStack {
@@ -37,9 +42,6 @@ struct ContentView: View {
                 Text(musicTrack?.title ?? "")
                     .font(.title)
                 Text((musicTrack?.artist ?? "") + " - " + (musicTrack?.album ?? ""))
-
-                Text("duration: \(String(format: "%.1f", musicTrack?.duration ?? 0))")
-                Text("start time: \(time, specifier: "%.1f")")
 
                 HStack(spacing: 30) {
                     Button(action: {
@@ -66,9 +68,27 @@ struct ContentView: View {
                     }
                     .buttonStyle(.plain)
                 }
+
+                let duration = musicTrack?.duration ?? 0
+
+                Slider(value: $elapsedTime, in: 0...duration) {
+                } minimumValueLabel: {
+                    Text(formatTime(elapsedTime))
+                        .font(.caption)
+                        .padding(.horizontal, 5)
+                } maximumValueLabel: {
+                    Text(formatTime(duration))
+                        .font(.caption)
+                        .padding(.horizontal, 5)
+                } onEditingChanged: { editing in
+                    if !editing {
+                        selectedPlayer?.playbackTime = elapsedTime
+                    }
+                }
+                .frame(width: 250)
             }
         }
-        .frame(minWidth: 300, minHeight: 300)
+        .frame(minWidth: 400, minHeight: 300)
         .padding()
         .environment(\.colorScheme, .dark)
         .onReceive(selectedPlayer!.$currentTrack) {
@@ -83,9 +103,20 @@ struct ContentView: View {
             }
         }
         .onReceive(selectedPlayer!.$playbackState) {
-            time = $0.time
+            elapsedTime = $0.time
             isPlaying = $0.isPlaying
         }
+        .onReceive(timer) { _ in
+            if isPlaying {
+                elapsedTime += timerInterval
+            }
+        }
+    }
+
+    private func formatTime(_ time: TimeInterval) -> String {
+        let minutes = Int(time) / 60
+        let seconds = Int(time) % 60
+        return String(format: "%d:%02d", minutes, seconds)
     }
 }
 
