@@ -22,15 +22,12 @@ struct ContentView: View {
             GeometryReader { geometry in
                 artwork
                     .resizable()
-                    .scaledToFill()
                     .aspectRatio(contentMode: .fill)
                     .frame(
                         width: geometry.size.width,
-                        height: geometry.size.height + geometry.safeAreaInsets.top,
-                        alignment: .center
+                        height: geometry.size.height
                     )
                     .clipped()
-                    .ignoresSafeArea()
                     .blur(radius: 5)
                     .opacity(0.6)
                     .overlay(Color.black.opacity(0.5))
@@ -63,7 +60,7 @@ struct ContentView: View {
                 Text("start time: \(time, specifier: "%.1f")")
             }
         }
-        .frame(width: 400, height: 400)
+        .frame(minWidth: 300, minHeight: 300)
         .padding()
         .environment(\.colorScheme, .dark)
     }
