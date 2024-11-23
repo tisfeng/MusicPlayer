@@ -44,8 +44,6 @@ Unified API for music players.
 > }
 > ```
 
-![](https://raw.githubusercontent.com/tisfeng/ImageBed/main/uPic/YEAN5P.png)
-
 </details>
 
 #### Universal
@@ -75,6 +73,8 @@ if player.playbackState.isPlaying {
     player.skipToNextItem()
 }
 ```
+
+![](https://raw.githubusercontent.com/tisfeng/ImageBed/main/uPic/YEAN5P.png)
 
 ## License
 
