@@ -24,8 +24,10 @@ let package = Package(
                 "CXExtensions",
                 .target(name: "LXMusicPlayer", condition: .when(platforms: [.macOS])),
                 .target(name: "MediaRemotePrivate", condition: .when(platforms: [.macOS, .iOS])),
-                .target(name: "playerctl", condition: .when(platforms: [.linux])),
-            ], cSettings: [
+                // Fix waring: couldn't find pc file for playerctl https://github.com/ddddxxx/MusicPlayer/issues/13
+                // .target(name: "playerctl", condition: .when(platforms: [.linux])),
+            ],
+            cSettings: [
                 .define("TARGET_OS_MAC", to: "1", .when(platforms: [.macOS, .iOS])),
                 .define("TARGET_OS_IPHONE", to: "1", .when(platforms: [.iOS])),
             ]),
